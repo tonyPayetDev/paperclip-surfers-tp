@@ -1,0 +1,23 @@
+services:
+  paperclip:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3100"
+      NODE_ENV: "production"
+      SERVE_UI: "true"
+      PAPERCLIP_HOME: "/paperclip"
+      PAPERCLIP_INSTANCE_ID: "default"
+      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: "public"
+      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-https://paperclip.automatisationboost.com}"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+    volumes:
+      - paperclip-data:/paperclip
+
+volumes:
+  paperclip-data:
