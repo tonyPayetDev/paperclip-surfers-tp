@@ -1,0 +1,48 @@
+# deploy.site configuration for Paperclip
+# Domain: paperclip.automatisationboost.com
+#
+# BEFORE DEPLOYING:
+#   1. Set BETTER_AUTH_SECRET to a strong random value (32+ chars)
+#   2. Optionally set ANTHROPIC_API_KEY and/or OPENAI_API_KEY for agent adapters
+#   3. Optionally set DATABASE_URL if using an external PostgreSQL instance
+#      (leave unset to use embedded PGlite - recommended for single-instance deploys)
+
+name: paperclip
+
+build:
+  context: .
+  dockerfile: Dockerfile
+
+domain: paperclip.automatisationboost.com
+
+port: 3100
+
+env:
+  HOST: "0.0.0.0"
+  PORT: "3100"
+  NODE_ENV: "production"
+  SERVE_UI: "true"
+  PAPERCLIP_HOME: "/paperclip"
+  PAPERCLIP_INSTANCE_ID: "default"
+  PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
+  PAPERCLIP_DEPLOYMENT_EXPOSURE: "public"
+  PAPERCLIP_PUBLIC_URL: "https://paperclip.automatisationboost.com"
+  # BETTER_AUTH_SECRET must be set in deploy.site secrets (never commit this value)
+  # DATABASE_URL: optional - omit to use embedded PGlite
+
+volumes:
+  - /paperclip
+
+healthcheck:
+  path: /api/health
+  interval: 30
+  timeout: 10
+  retries: 3
+
+secrets:
+  - BETTER_AUTH_SECRET
+  # Optional LLM provider keys for agent adapters:
+  # - ANTHROPIC_API_KEY
+  # - OPENAI_API_KEY
+  # Optional external database:
+  # - DATABASE_URL
